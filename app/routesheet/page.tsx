@@ -10,6 +10,10 @@ type Car = {
   customer_name: string | null;
   vehicle: string | null;
   insurer: string | null;
+  status: string | null;
+  stage: string | null;
+  tech_name: string | null;
+  promised_date: string | null;
   created_at: string;
 };
 
@@ -21,7 +25,9 @@ export default function RouteSheetPage() {
     async function loadCars() {
       const { data, error } = await supabase
         .from("cars")
-        .select("id, ro_number, customer_name, vehicle, insurer, created_at")
+        .select(
+          "id, ro_number, customer_name, vehicle, insurer, status, stage, tech_name, promised_date, created_at"
+        )
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -52,11 +58,15 @@ export default function RouteSheetPage() {
 
       <div className="space-y-3">
         {cars.map((car) => (
-          <div key={car.id} className="rounded border p-4">
-            <div className="font-semibold">RO: {car.ro_number}</div>
+          <div key={car.id} className="rounded-xl border p-4 bg-white/5 space-y-1">
+            <div className="text-lg font-semibold">RO #{car.ro_number}</div>
             <div>Customer: {car.customer_name || "—"}</div>
             <div>Vehicle: {car.vehicle || "—"}</div>
             <div>Insurer: {car.insurer || "—"}</div>
+            <div>Status: {car.status || "—"}</div>
+            <div>Stage: {car.stage || "—"}</div>
+            <div>Tech: {car.tech_name || "—"}</div>
+            <div>Promised: {car.promised_date || "—"}</div>
           </div>
         ))}
 
