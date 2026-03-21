@@ -9,6 +9,12 @@ export default function CarsPage() {
   const [customerName, setCustomerName] = useState("");
   const [vehicle, setVehicle] = useState("");
   const [insurer, setInsurer] = useState("");
+
+  const [status, setStatus] = useState("intake");
+  const [stage, setStage] = useState("estimate");
+  const [tech, setTech] = useState("");
+  const [promisedDate, setPromisedDate] = useState("");
+
   const [message, setMessage] = useState("");
 
   async function handleSave(e: React.FormEvent) {
@@ -20,6 +26,10 @@ export default function CarsPage() {
       customer_name: customerName,
       vehicle,
       insurer,
+      status,
+      stage,
+      tech_name: tech,
+      promised_date: promisedDate || null,
     });
 
     if (error) {
@@ -32,6 +42,10 @@ export default function CarsPage() {
     setCustomerName("");
     setVehicle("");
     setInsurer("");
+    setTech("");
+    setPromisedDate("");
+    setStatus("intake");
+    setStage("estimate");
   }
 
   return (
@@ -74,6 +88,42 @@ export default function CarsPage() {
           placeholder="Insurer"
           value={insurer}
           onChange={(e) => setInsurer(e.target.value)}
+        />
+
+        <select
+          className="w-full rounded border p-3"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="intake">Intake</option>
+          <option value="in_progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+
+        <select
+          className="w-full rounded border p-3"
+          value={stage}
+          onChange={(e) => setStage(e.target.value)}
+        >
+          <option value="estimate">Estimate</option>
+          <option value="tear_down">Tear Down</option>
+          <option value="body">Body</option>
+          <option value="paint">Paint</option>
+          <option value="reassembly">Reassembly</option>
+        </select>
+
+        <input
+          className="w-full rounded border p-3"
+          placeholder="Tech Name"
+          value={tech}
+          onChange={(e) => setTech(e.target.value)}
+        />
+
+        <input
+          type="date"
+          className="w-full rounded border p-3"
+          value={promisedDate}
+          onChange={(e) => setPromisedDate(e.target.value)}
         />
 
         <button className="w-full rounded bg-black text-white p-3">
