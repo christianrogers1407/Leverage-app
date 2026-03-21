@@ -58,7 +58,11 @@ export default function RouteSheetPage() {
 
       <div className="space-y-3">
         {cars.map((car) => (
-          <div key={car.id} className="rounded-xl border p-4 bg-white/5 space-y-1">
+          <Link
+            href={`/cars/${car.id}`}
+            key={car.id}
+            className="block rounded-xl border p-4 bg-white/5"
+          >
             <div className="text-lg font-semibold">RO #{car.ro_number}</div>
             <div>Customer: {car.customer_name || "—"}</div>
             <div>Vehicle: {car.vehicle || "—"}</div>
@@ -67,7 +71,7 @@ export default function RouteSheetPage() {
             <div>Stage: {car.stage || "—"}</div>
             <div>Tech: {car.tech_name || "—"}</div>
             <div>Promised: {car.promised_date || "—"}</div>
-          </div>
+          </Link>
         ))}
 
         {!cars.length && !message ? (
