@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -37,6 +38,15 @@ export default function RouteSheetPage() {
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-4">
       <h1 className="text-2xl font-semibold">Route Sheet</h1>
+
+      <div className="flex gap-3">
+        <Link href="/routesheet" className="px-3 py-2 rounded border">
+          Route Sheet
+        </Link>
+        <Link href="/cars" className="px-3 py-2 rounded border">
+          Add Car
+        </Link>
+      </div>
 
       {message ? <div className="text-sm">{message}</div> : null}
 

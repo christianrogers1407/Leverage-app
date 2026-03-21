@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -36,6 +37,15 @@ export default function CarsPage() {
   return (
     <div className="max-w-xl mx-auto p-6 space-y-4">
       <h1 className="text-2xl font-semibold">Add Car</h1>
+
+      <div className="flex gap-3">
+        <Link href="/routesheet" className="px-3 py-2 rounded border">
+          Route Sheet
+        </Link>
+        <Link href="/cars" className="px-3 py-2 rounded border">
+          Add Car
+        </Link>
+      </div>
 
       <form onSubmit={handleSave} className="space-y-3">
         <input
