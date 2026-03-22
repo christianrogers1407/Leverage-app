@@ -43,13 +43,17 @@ export default function CarsPage() {
     setVehicle("");
     setInsurer("");
     setTechs([]);
+    setTechInput("");
   }
 
   return (
     <div>
       <h1>Add Car</h1>
 
-      <Link href="/routesheet">Route Sheet</Link>
+      <div className="flex gap-3">
+        <Link href="/routesheet">Route Sheet</Link>
+        <Link href="/cars">Add Car</Link>
+      </div>
 
       <form onSubmit={handleSave}>
         <input value={roNumber} onChange={(e) => setRoNumber(e.target.value)} placeholder="RO" />
@@ -57,8 +61,14 @@ export default function CarsPage() {
         <input value={vehicle} onChange={(e) => setVehicle(e.target.value)} placeholder="Vehicle" />
         <input value={insurer} onChange={(e) => setInsurer(e.target.value)} placeholder="Insurer" />
 
-        <input value={techInput} onChange={(e) => setTechInput(e.target.value)} placeholder="Add Tech" />
-        <button type="button" onClick={addTech}>Add</button>
+        <div>
+          <input
+            value={techInput}
+            onChange={(e) => setTechInput(e.target.value)}
+            placeholder="Add Tech"
+          />
+          <button type="button" onClick={addTech}>Add</button>
+        </div>
 
         <div>
           {techs.map((t, i) => (
