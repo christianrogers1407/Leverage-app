@@ -22,24 +22,38 @@ export default function RouteSheetPage() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    async function loadCars() {
-      const { data, error } = await supabase
-        .from("cars")
-        .select(
-          "id, ro_number, customer_name, vehicle, insurer, status, stage, tech_name, promised_date, created_at"
-        )
-        .order("created_at", { ascending: false });
+    loadCars();
+  }, []);
 
-      if (error) {
-        setMessage(error.message);
-        return;
-      }
+  async function loadCars() {
+    const { data, error } = await supabase
+      .from("cars")
+      .select(
+        "id, ro_number, customer_name, vehicle, insurer, status, stage, tech_name, promised_date, created_at"
+      )
+      .order("created_at", { ascending: false });
 
-      setCars(data ?? []);
+    if (error) {
+      setMessage(error.message);
+      return;
+    }
+
+    setCars(data ?? []);
+  }
+
+  async function updateCar(id: string, updates: Partial<Car>) {
+    const { error } = await supabase
+      .from("cars")
+      .update(updates)
+      .eq("id", id);
+
+    if (error) {
+      alert(error.message);
+      return;
     }
 
     loadCars();
-  }, []);
+  }
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-4">
@@ -58,25 +72,48 @@ export default function RouteSheetPage() {
 
       <div className="space-y-3">
         {cars.map((car) => (
-          <Link
-            href={`/cars/${car.id}`}
-            key={car.id}
-            className="block rounded-xl border p-4 bg-white/5"
-          >
-            <div className="text-lg font-semibold">RO #{car.ro_number}</div>
-            <div>Customer: {car.customer_name || "—"}</div>
-            <div>Vehicle: {car.vehicle || "—"}</div>
-            <div>Insurer: {car.insurer || "—"}</div>
-            <div>Status: {car.status || "—"}</div>
-            <div>Stage: {car.stage || "—"}</div>
-            <div>Tech: {car.tech_name || "—"}</div>
-            <div>Promised: {car.promised_date || "—"}</div>
-          </Link>
-        ))}
+          <div key={car.id} className="rounded-xl border p-4 bg-white/5 space-y-2">
+            
+            <Link href={`/cars/${car.id}`}>
+              <div className="text-lg font-semibold">RO #{car.ro_number}</div>
+              <div>Customer: {car.customer_name || "—"}</div>
+              <div>Vehicle: {car.vehicle || "—"}</div>
+            </Link>
 
-        {!cars.length && !message ? (
-          <div className="text-sm">No cars yet.</div>
-        ) : null}
+            <div className="flex gap-2">
+              <select
+                className="rounded border p-2"
+                value={car.status || "intake"}
+                onChange={(e) =>
+                  updateCar(car.id, { status: e.target.value })
+                }
+              >
+                <option value="intake">Intake</option>
+                <option value="in_progress">In Progress</option>
+                <option value="done">Done</option>
+              </select>
+
+              <select
+                className="rounded border p-2"
+                value={car.stage || "estimate"}
+                onChange={(e) =>
+                  updateCar(car.id, { stage: e.target.value })
+                }
+              >
+                <option value="estimate">Estimate</option>
+                <option value="tear_down">Tear Down</option>
+                <option value="body">Body</option>
+                <option value="paint">Paint</option>
+                <option value="reassembly">Reassembly</option>
+              </select>
+            </div>
+
+            <div className="text-sm text-gray-500">
+              Tech: {car.tech_name || "—"} | Due: {car.promised_date || "—"}
+            </div>
+
+          </div>
+        ))}
       </div>
     </div>
   );
