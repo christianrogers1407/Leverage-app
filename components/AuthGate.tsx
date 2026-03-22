@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -9,7 +9,11 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [authed, setAuthed] = useState(false);
 
-  const publicPaths = ["/login", "/test123", "/cars", "/routesheet"];
+  const isPublicPath =
+  pathname === "/login" ||
+  pathname === "/test123" ||
+  pathname === "/routesheet" ||
+  pathname.startsWith("/cars"); 
 
   useEffect(() => {
     async function checkAuth() {
@@ -29,9 +33,9 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  if (publicPaths.includes(pathname)) {
-    return <>{children}</>;
-  }
+  if (isPublicPath) {
+  return <>{children}</>;
+}
 
   if (loading) {
     return <div className="p-6">Loading...</div>;

@@ -33,7 +33,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: "https://leverage-app-teal.vercel.app",
+        emailRedirectTo: "http://localhost:3000/login",
       },
     });
 
@@ -43,6 +43,19 @@ export default function LoginPage() {
     }
 
     setMessage("Magic link sent.");
+  }
+
+  async function handleSetPassword() {
+    const { error } = await supabase.auth.updateUser({
+      password: "test1234",
+    });
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    alert("Password set to test1234");
   }
 
   return (
@@ -80,12 +93,7 @@ export default function LoginPage() {
 
       <button
         className="w-full rounded border p-3"
-        onClick={async () => {
-          await supabase.auth.updateUser({
-            password: "test1234",
-          });
-          alert("Password set to test1234");
-        }}
+        onClick={handleSetPassword}
       >
         Set Password (temp)
       </button>

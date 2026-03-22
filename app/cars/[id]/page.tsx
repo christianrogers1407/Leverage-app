@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabaseClient";
 
 type Car = {
@@ -25,7 +26,9 @@ export default function CarDetailPage({
 
   const [status, setStatus] = useState("intake");
   const [stage, setStage] = useState("estimate");
-  const [tech, setTech] = useState("");
+ const [techs, setTechs] = useState<string[]>([]);
+ const [techInput, setTechInput] = useState("");
+const [techInput, setTechInput] = useState("");
   const [promisedDate, setPromisedDate] = useState("");
 
   useEffect(() => {
@@ -61,7 +64,7 @@ export default function CarDetailPage({
       .update({
         status,
         stage,
-        tech_name: tech,
+        techs,
         promised_date: promisedDate || null,
       })
       .eq("id", params.id);
@@ -74,10 +77,18 @@ export default function CarDetailPage({
     setMessage("Changes saved.");
   }
 
+  if (message && !car) {
+    return <div className="p-6">{message}</div>;
+  }
+
   if (!car) {
     return <div className="p-6">Loading...</div>;
   }
-
+function addTech() {
+  if (!techInput) return;
+  setTechs([...techs, techInput]);
+  setTechInput("");
+}
   return (
     <div className="max-w-xl mx-auto p-6 space-y-4">
       <h1 className="text-2xl font-semibold">RO #{car.ro_number}</h1>
@@ -109,12 +120,25 @@ export default function CarDetailPage({
           <option value="reassembly">Reassembly</option>
         </select>
 
-        <input
-          className="w-full rounded border p-3"
-          placeholder="Tech Name"
-          value={tech}
-          onChange={(e) => setTech(e.target.value)}
-        />
+        <div className="flex gap-2">
+  <input
+    className="w-full rounded border p-3"
+    placeholder="Add Tech"
+    value={techInput}
+    onChange={(e) => setTechInput(e.target.value)}
+  />
+  <button type="button" onClick={addTech}>
+    Add
+  </button>
+</div>
+
+<div className="flex gap-2 flex-wrap">
+  {techs.map((t, i) => (
+    <div key={i} className="border px-2 py-1 rounded text-sm">
+      {t}
+    </div>
+  ))}
+</div>
 
         <input
           type="date"

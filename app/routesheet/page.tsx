@@ -52,7 +52,7 @@ export default function RouteSheetPage() {
       return;
     }
 
-    loadCars();
+    loadCars(); // refresh
   }
 
   return (
@@ -72,10 +72,26 @@ export default function RouteSheetPage() {
 
       <div className="space-y-3">
         {cars.map((car) => (
-          <div key={car.id} className="rounded-xl border p-4 bg-white/5 space-y-2">
-            
+          <div
+  key={car.id}
+  className={`rounded-xl border p-4 space-y-2 ${
+    car.stage === "estimate"
+      ? "bg-yellow-100"
+      : car.stage === "tear_down"
+      ? "bg-red-100"
+      : car.stage === "body"
+      ? "bg-blue-100"
+      : car.stage === "paint"
+      ? "bg-purple-100"
+      : car.stage === "reassembly"
+      ? "bg-green-100"
+      : "bg-white"
+  }`}
+>
             <Link href={`/cars/${car.id}`}>
-              <div className="text-lg font-semibold">RO #{car.ro_number}</div>
+              <div className="text-lg font-semibold">
+                RO #{car.ro_number}
+              </div>
               <div>Customer: {car.customer_name || "—"}</div>
               <div>Vehicle: {car.vehicle || "—"}</div>
             </Link>
@@ -109,11 +125,15 @@ export default function RouteSheetPage() {
             </div>
 
             <div className="text-sm text-gray-500">
-              Tech: {car.tech_name || "—"} | Due: {car.promised_date || "—"}
+              Tech: {car.tech_name || "—"} | Due:{" "}
+              {car.promised_date || "—"}
             </div>
-
           </div>
         ))}
+
+        {!cars.length ? (
+          <div className="text-sm">No cars yet.</div>
+        ) : null}
       </div>
     </div>
   );
